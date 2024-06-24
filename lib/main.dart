@@ -4,9 +4,24 @@ import 'course_page.dart';
 import 'glossary_page.dart';
 import 'profile_page.dart';
 import 'settings_page.dart';
+import 'login_page.dart';
 
 void main() {
-  runApp(MasterValueApp());
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Master Value',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: LoginPage(),
+    );
+  }
 }
 
 class MasterValueApp extends StatelessWidget {
@@ -48,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Master Value'),
+        title: Text('Master Value', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -77,8 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.blueAccent,
         onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

@@ -7,11 +7,11 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursePageState extends State<CoursePage> {
-  final List<String> courses = [
-    'Introducción a las Finanzas',
-    'Inversiones Inteligentes',
-    'Ahorro y Presupuesto',
-    'Educación Financiera',
+  final List<Map<String, String>> courses = [
+    {'name': 'Course 1', 'image': 'assets/img/course1.jpeg'},
+    {'name': 'Course 2', 'image': 'assets/img/course2.jpeg'},
+    {'name': 'Course 3', 'image': 'assets/img/course3.jpeg'},
+    {'name': 'Course 4', 'image': 'assets/img/course4.jpeg'},
   ];
 
   String _searchText = '';
@@ -36,12 +36,12 @@ class _CoursePageState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     final filteredCourses = courses
-        .where((course) => course.toLowerCase().contains(_searchText.toLowerCase()))
+        .where((course) => course['name']!.toLowerCase().contains(_searchText.toLowerCase()))
         .toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cursos'),
+        title: Text('Courses'),
       ),
       body: Column(
         children: [
@@ -50,7 +50,7 @@ class _CoursePageState extends State<CoursePage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: 'Buscar Cursos',
+                labelText: 'Search Courses',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.search),
               ),
@@ -62,12 +62,13 @@ class _CoursePageState extends State<CoursePage> {
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
-                    title: Text(filteredCourses[index]),
+                    leading: Image.asset(filteredCourses[index]['image']!),
+                    title: Text(filteredCourses[index]['name']!),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CourseDetailPage(courseName: filteredCourses[index]),
+                          builder: (context) => CourseDetailPage(courseName: filteredCourses[index]['name']!),
                         ),
                       );
                     },
@@ -81,3 +82,4 @@ class _CoursePageState extends State<CoursePage> {
     );
   }
 }
+

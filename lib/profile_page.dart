@@ -18,11 +18,11 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Nombre: John Doe',
+              'Nombre: Thayli Pacheco',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Estudiante de Finanzas',
+              'Estudiante de Ingeniería de Datos',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
             SizedBox(height: 16),

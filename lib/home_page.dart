@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'course_page.dart';
 import 'glossary_page.dart';
-import 'video_player_page.dart';
 
 class HomePage extends StatelessWidget {
   final List<String> img = [
@@ -23,23 +22,26 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("John Doe"),
-              accountEmail: Text("john.doe@example.com"),
+              accountName: Text("Master Value"),
+              accountEmail: Text("mastervalue@example.com"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/img/profile_picture.png"),
+                backgroundColor: Colors.white,
+                child: Text(
+                  "MV",
+                  style: TextStyle(fontSize: 40.0),
+                ),
               ),
-              decoration: BoxDecoration(color: Colors.blue),
             ),
             ListTile(
               leading: Icon(Icons.home),
-              title: Text("Home"),
+              title: Text('Home'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.book),
-              title: Text("Courses"),
+              leading: Icon(Icons.school),
+              title: Text('Courses'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -48,8 +50,8 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.library_books),
-              title: Text("Glossary"),
+              leading: Icon(Icons.book),
+              title: Text('Glossary'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -64,49 +66,45 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             CarouselSlider(
-              options: CarouselOptions(height: 200.0, autoPlay: true),
-              items: img.map((imagePath) {
+              options: CarouselOptions(
+                height: 200.0,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                enlargeCenterPage: true,
+              ),
+              items: img.map((i) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
                       width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.symmetric(horizontal: 5.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        image: DecorationImage(
-                          image: AssetImage(imagePath),
-                          fit: BoxFit.cover,
-                        ),
+                        color: Colors.amber,
                       ),
+                      child: Image.asset(i, fit: BoxFit.cover),
                     );
                   },
                 );
               }).toList(),
             ),
+            SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Bienvenido a Master Value. Empieza a gestionar tus finanzas hoy.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                'Welcome to Master Value!',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => VideoPlayerPage(videoUrl: 'assets/video/sample_video.mp4')),
-                );
-              },
-              child: Text('Ver Video Introductorio'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CoursePage()),
-                );
-              },
-              child: Text('Ver Cursos de Finanzas'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Your one-stop solution for mastering valuable skills. Explore our wide range of courses and enrich your knowledge!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),

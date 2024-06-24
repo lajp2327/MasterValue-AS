@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  sqflite: ^2.3.3+1
+  path_provider: ^2.0.11
   carousel_slider: ^4.2.1
   video_player: ^2.1.14
 
@@ -68,6 +70,7 @@ flutter:
     - assets/img/profile_picture.png
     - assets/video/sample_video.mp4
     - assets/pdf/sample_document.pdf
+    - assets/img/logoo.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
