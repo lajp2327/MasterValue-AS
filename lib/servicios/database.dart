@@ -1,13 +1,12 @@
-import 'pacage:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-import 'pacage:path/path.dart';
-
-//La clase database nos permite hacer una sola instancia de la case "DB" para todo el proyecto y así evitar 
-//múltiples conexiones a la base de datos
+// La clase database nos permite hacer una sola instancia de la clase "DB" para todo el proyecto y así evitar
+// múltiples conexiones a la base de datos
 class DatabaseHelper {
     static final DatabaseHelper _instance = DatabaseHelper._internal();
     factory DatabaseHelper() => _instance;
-que es una función asincrónica y como se relaciona con wait
+
     static Database? _database;
 
     DatabaseHelper._internal();
@@ -16,10 +15,25 @@ que es una función asincrónica y como se relaciona con wait
         if (_database != null) {
             return _database!;
         }
-        _database = await initDB();
+        _database = await _initDatabase();
         return _database!;
     }
 
     Future<Database> _initDatabase() async {
+        String path = join(await getDatabasesPath(), 'master_value.db');
 
-        String path = join(await getDatabasePath()
+        return await openDatabase(
+            path,
+            version: 1,
+            onCreate: (db, version) {
+                // Tablas de base de datos
+                db.execute('''
+          CREATE TABLE my_table (
+            id INTEGER PRIMARY KEY,
+            name TEXT
+          )
+        ''');
+            },
+        );
+    }
+}
