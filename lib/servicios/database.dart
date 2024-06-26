@@ -67,7 +67,7 @@ class DatabaseHelper {
             apellido_m TEXT,
             email TEXT,
             telefono INTEGER,
-            id_direccion INTEGER NOT NULL,
+            id_direccion INTEGER,
             FOREIGN KEY (id_direccion) REFERENCES direcciones (id_direccion)
           )
         ''');
@@ -77,8 +77,8 @@ class DatabaseHelper {
             idrecyclingcenter INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre_rc TEXT,
             materiales TEXT,
-            id_direccion INTEGER NOT NULL,
-            id_horarios INTEGER NOT NULL,
+            id_direccion INTEGER,
+            id_horarios INTEGER,
             FOREIGN KEY (id_direccion) REFERENCES direcciones (id_direccion),
             FOREIGN KEY (id_horarios) REFERENCES horarios (id_horarios)
           )
