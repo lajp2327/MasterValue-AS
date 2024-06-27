@@ -2,29 +2,29 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-    static final DatabaseHelper _instance = DatabaseHelper._internal();
-    factory DatabaseHelper() => _instance;
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => _instance;
 
-    static Database? _database;
+  static Database? _database;
 
-    DatabaseHelper._internal();
+  DatabaseHelper._internal();
 
-    Future<Database> get database async {
-        if (_database != null) {
-            return _database!;
-        }
-        _database = await _initDatabase();
-        return _database!;
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
     }
+    _database = await _initDatabase();
+    return _database!;
+  }
 
-    Future<Database> _initDatabase() async {
-        String path = join(await getDatabasesPath(), 'eco_radar.db');
+  Future<Database> _initDatabase() async {
+    String path = join(await getDatabasesPath(), 'eco_radar.db');
 
-        return await openDatabase(
-            path,
-            version: 1,
-            onCreate: (db, version) async {
-                await db.execute('''
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
           CREATE TABLE estados (
             id_estado INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre_estado TEXT,
@@ -32,7 +32,7 @@ class DatabaseHelper {
           )
         ''');
 
-                await db.execute('''
+        await db.execute('''
           CREATE TABLE direcciones (
             id_direccion INTEGER PRIMARY KEY AUTOINCREMENT,
             id_estado INTEGER,
@@ -45,21 +45,21 @@ class DatabaseHelper {
           )
         ''');
 
-                await db.execute('''
+        await db.execute('''
           CREATE TABLE materiales (
             id_materiales INTEGER PRIMARY KEY AUTOINCREMENT,
             material TEXT
           )
         ''');
 
-                await db.execute('''
+        await db.execute('''
           CREATE TABLE horarios (
             id_horarios INTEGER PRIMARY KEY AUTOINCREMENT,
             horario TEXT
           )
         ''');
 
-                await db.execute('''
+        await db.execute('''
           CREATE TABLE users (
             id_user INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT,
@@ -72,7 +72,7 @@ class DatabaseHelper {
           )
         ''');
 
-                await db.execute('''
+        await db.execute('''
           CREATE TABLE recycling_centers (
             idrecyclingcenter INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre_rc TEXT,
@@ -83,7 +83,17 @@ class DatabaseHelper {
             FOREIGN KEY (id_horarios) REFERENCES horarios (id_horarios)
           )
         ''');
-            },
-        );
-    }
+      },
+    );
+  }
+
+  Future<bool> authenticateUser(String nombre, String password) async {
+    var db = await database;
+    var result = await db.query(
+      'users', // Nombre de la tabla
+      where: 'nombre = ? AND password = ?',
+      whereArgs: [nombre, password],
+    );
+    return result.isNotEmpty;
+  }
 }

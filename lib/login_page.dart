@@ -1,6 +1,7 @@
 // login_page.dart
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'database.dart'; // Importa el archivo de base de datos
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,15 +11,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   String _errorMessage = '';
 
-  void _login() {
+  void _login() async {
     setState(() {
       _errorMessage = '';
     });
 
-    if (_usernameController.text == 'thay_ps' && _passwordController.text == 'password') {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    bool isAuthenticated = await _dbHelper.authenticateUser(username, password);
+
+    if (isAuthenticated) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MasterValueApp()),
