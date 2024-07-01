@@ -6,8 +6,12 @@ import 'profile_page.dart';
 import 'settings_page.dart';
 import 'login_page.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  DatabaseHelper db = DatabaseHelper();
+  await db.testDatabase();
+  
+  runApp(MasterValueApp());
 }
 
 class MyApp extends StatelessWidget {
