@@ -1,8 +1,7 @@
-// login_page.dart
 import 'package:flutter/material.dart';
+import 'servicios/database.dart'; // Importa el archivo de base de datos
+import 'home_page.dart'; // Importa la pantalla principal de tu aplicación
 import 'main.dart';
-import 'database.dart'; // Importa el archivo de base de datos
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -28,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     if (isAuthenticated) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MasterValueApp()),
+        MaterialPageRoute(builder: (context) => HomePage()), // Reemplaza HomePage() con tu pantalla principal
       );
     } else {
       setState(() {
