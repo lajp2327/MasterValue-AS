@@ -100,12 +100,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/img/drawer_bg.jpg'),
-                fit: BoxFit.cover,
+              color: Colors.teal,
               ),
             ),
-          ),
           ListTile(
             leading: Icon(Icons.home, color: Colors.teal),
             title: Text('Inicio'),
