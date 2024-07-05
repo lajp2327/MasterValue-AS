@@ -5,6 +5,8 @@ import 'glossary_page.dart';
 import 'profile_page.dart';
 import 'settings_page.dart';
 import 'login_page.dart';
+import 'register_page.dart';
+import 'complete_profile_page.dart';
 import 'servicios/database.dart'; // Importa el archivo de base de datos
 
 void main() async {
@@ -16,15 +18,22 @@ void main() async {
 }
 
 class MasterValueApp extends StatelessWidget {
+  static const Color myColor = Color(0xFF54AB95); // Color en formato ARGB
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Master Value',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green, // Define el tono primario, por ejemplo verde
+        primaryColor: myColor, // Usa el color personalizado como primaryColor
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoginPage(),
+      routes: {
+        '/home': (context) => MyHomePage(),
+        '/register': (context) => RegisterPage(),
+        '/completeProfile': (context) => CompleteProfilePage(email: '', password: '',),
+      }
     );
   }
 }

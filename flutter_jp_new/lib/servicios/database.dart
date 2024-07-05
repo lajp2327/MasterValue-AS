@@ -18,11 +18,11 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'eco_radar_new.db');
+    String path = join(await getDatabasesPath(), 'master_value.db');
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
     );
   }
@@ -31,39 +31,49 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE users (
         id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT,
+        password VARCHAR,
         nombre TEXT,
         apellido_p TEXT,
         apellido_m TEXT,
-        email TEXT,
-        telefono INTEGER,
-        password TEXT
+        fecha_nacimiento TEXT
       )
     ''');
   }
 
-  Future<int> insertarUsuario(String nombre, String apellidoP, String apellidoM, String email, int telefono, String password) async {
+  Future<int> insertarUsuario(String email, String password, String nombre, String apellidoP, String apellidoM, String fechaNacimiento) async {
     var db = await database;
     return await db.insert(
       'users',
       {
+        'email': email,
+        'password': password,
         'nombre': nombre,
         'apellido_p': apellidoP,
         'apellido_m': apellidoM,
-        'email': email,
-        'telefono': telefono,
-        'password': password,
+        'fecha_nacimiento': fechaNacimiento,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<bool> authenticateUser(String nombre, String password) async {
+  Future<bool> authenticateUser(String email, String password) async {
     var db = await database;
     var result = await db.query(
       'users',
-      where: 'nombre = ? AND password = ?',
-      whereArgs: [nombre, password],
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
     );
     return result.isNotEmpty;
+  }
+
+  Future<Map<String, dynamic>> getUserData(String email) async {
+    var db = await database;
+    var result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    return result.isNotEmpty ? result.first : {};
   }
 }

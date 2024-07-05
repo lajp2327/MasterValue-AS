@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'servicios/database.dart';
+import 'complete_profile_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -7,40 +7,41 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nombreController = TextEditingController();
-  final TextEditingController _apellidoPController = TextEditingController();
-  final TextEditingController _apellidoMController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _telefonoController = TextEditingController();
-  final DatabaseHelper _dbHelper = DatabaseHelper();
-
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   String _errorMessage = '';
 
-  void _register() async {
+  void _register() {
     setState(() {
       _errorMessage = '';
     });
 
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-    String nombre = _nombreController.text;
-    String apellidoP = _apellidoPController.text;
-    String apellidoM = _apellidoMController.text;
     String email = _emailController.text;
-    int telefono = int.tryParse(_telefonoController.text) ?? 0;
+    String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
 
-    await _dbHelper.insertarUsuario(nombre, apellidoP, apellidoM, email, telefono, password);
+    if (password != confirmPassword) {
+      setState(() {
+        _errorMessage = 'Las contraseñas no coinciden';
+      });
+      return;
+    }
 
-    Navigator.pop(context);
+    // Navegar a la siguiente pantalla para completar el perfil
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompleteProfilePage(email: email, password: password),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Regístrate'),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -48,9 +49,9 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextField(
-              controller: _usernameController,
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Correo electrónico',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -58,56 +59,24 @@ class _RegisterPageState extends State<RegisterPage> {
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Contraseña',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
             ),
             SizedBox(height: 20),
             TextField(
-              controller: _nombreController,
+              controller: _confirmPasswordController,
               decoration: InputDecoration(
-                labelText: 'Nombre',
+                labelText: 'Confirmar contraseña',
                 border: OutlineInputBorder(),
               ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _apellidoPController,
-              decoration: InputDecoration(
-                labelText: 'Apellido Paterno',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _apellidoMController,
-              decoration: InputDecoration(
-                labelText: 'Apellido Materno',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _telefonoController,
-              decoration: InputDecoration(
-                labelText: 'Teléfono',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
+              obscureText: true,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _register,
-              child: Text('Register'),
+              child: Text('Siguiente'),
             ),
             SizedBox(height: 10),
             Text(
