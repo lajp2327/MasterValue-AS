@@ -1,5 +1,5 @@
 # Define la plataforma iOS y la versión mínima requerida
-platform :ios, '12.0'
+platform :ios, '15.0'
 
 # Obtiene la ruta al directorio actual del Podfile
 flutter_root = File.dirname(File.realpath(__FILE__))

@@ -15,10 +15,9 @@ class _HomePageState extends State<HomePage> {
 
   // Lista de imágenes para el carrusel
   final List<String> img = [
-    'assets/img/course1.jpeg',
-    'assets/img/course2.jpeg',
-    'assets/img/course3.jpeg',
-    'assets/img/course4.jpeg',
+    'assets/img/course1.jpg',
+    'assets/img/course2.jpg',
+    'assets/img/course3.jpg',
   ];
 
   @override
@@ -27,73 +26,29 @@ class _HomePageState extends State<HomePage> {
     _loadUserData(); // Cargar los datos del usuario al iniciar la página
   }
 
-Future<void> _loadUserData() async {
-  // Aquí debes obtener el email del usuario actual, por ejemplo desde Firebase Auth
-  String userEmail = 'usuario@example.com'; 
+  Future<void> _loadUserData() async {
+    String userEmail = 'usuario@example.com';
 
-  try {
-    var userData = await _databaseHelper.getUserData(userEmail);
+    try {
+      var userData = await _databaseHelper.getUserData(userEmail);
 
-    setState(() {
-      _userName = userData['nombre'] ?? "Juan Pablo";
-    });
-  } catch (e) {
-    // Manejo de error al cargar los datos del usuario
-    print('Error cargando datos del usuario: $e');
+      setState(() {
+        _userName = userData['nombre'] ?? "Juan Pablo";
+      });
+    } catch (e) {
+      // Manejo de error al cargar los datos del usuario
+      print('Error cargando datos del usuario: $e');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HomePage'),
+        title: Text('Inicio'),
+        backgroundColor: Colors.teal,
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("Master Value"),
-              accountEmail: Text("mastervalue@example.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  "MV",
-                  style: TextStyle(fontSize: 40.0),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.school),
-              title: Text('Courses'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CoursePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.book),
-              title: Text('Glossary'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GlossaryPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: _buildDrawer(context),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,10 +56,12 @@ Future<void> _loadUserData() async {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Welcome $_userName!',
+                'Cursos Populares',
                 style: TextStyle(
+                  fontFamily: 'Montserrat',
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: Colors.teal[800],
                 ),
               ),
             ),
@@ -117,75 +74,82 @@ Future<void> _loadUserData() async {
                 enlargeCenterPage: true,
                 viewportFraction: 0.9,
               ),
-              items: img.map((item) => buildCarouselItem(item)).toList(),
+              items: img.map((item) => _buildCarouselItem(item)).toList(),
             ),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF54AB95), Color(0xFF5AC375)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                    child: Text(
-                      'Tus Cursos',
-                      style: TextStyle(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Credit and Debit',
-                    'Claudia Alves',
-                    'Progres: 60%',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Offers',
-                    'Avery Davis',
-                    'Completed',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Analysis',
-                    'Yael Amari',
-                    'Progres: 36%',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'You Got This',
-                    'Shawn Garcia',
-                    'Progres: 15%',
-                  ),
-                ],
-              ),
-            ),
+            _buildCoursesSection(),
           ],
         ),
       ),
     );
   }
 
-  Widget buildCarouselItem(String imagePath) {
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+            accountName: Text("Master Value"),
+            accountEmail: Text("mastervalue@example.com"),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text(
+                "MV",
+                style: TextStyle(fontSize: 40.0, color: Colors.teal),
+              ),
+            ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/img/drawer_bg.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home, color: Colors.teal),
+            title: Text('Inicio'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.school, color: Colors.teal),
+            title: Text('Cursos'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoursePage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.book, color: Colors.teal),
+            title: Text('Glosario'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => GlossaryPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCarouselItem(String imagePath) {
     return Container(
-      width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 4),
+            blurRadius: 5.0,
+          ),
+        ],
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
@@ -194,71 +158,111 @@ Future<void> _loadUserData() async {
     );
   }
 
-  Widget buildCategoryItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-    String progress,
-  ) {
+  Widget _buildCoursesSection() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Container(
-        width: double.infinity,
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Tus Cursos',
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 20,
+              color: Colors.teal[800],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          _buildCourseCard(
+            'Finanzas Personales',
+            'Carlos López',
+            0.60, // 60% de progreso
+            Icons.monetization_on_rounded,
+            Colors.orange,
+          ),
+          _buildCourseCard(
+            'Inversiones y Bolsa de Valores',
+            'María González',
+            0.83, // Curso completado
+            Icons.trending_up,
+            Colors.green,
+          ),
+          _buildCourseCard(
+            'Contabilidad Básica',
+            'Ana Rodríguez',
+            0.36, // 36% de progreso
+            Icons.account_balance,
+            Colors.blue,
+          ),
+          _buildCourseCard(
+            'Planeación Financiera',
+            'José Martínez',
+            0.15, // 15% de progreso
+            Icons.bar_chart,
+            Colors.purple,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCourseCard(String title, String subtitle, double progress, IconData icon, Color iconColor) {
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                icon,
-                color: Colors.black,
-                size: 24,
-              ),
+            CircleAvatar(
+              backgroundColor: iconColor.withOpacity(0.1),
+              child: Icon(icon, color: iconColor),
             ),
-            SizedBox(width: 12),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'Montserrat',
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.teal[900],
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Readex Pro',
+                      fontFamily: 'Montserrat',
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Colors.teal[600],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey[200],
+                    color: iconColor,
+                    minHeight: 5,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '${(progress * 100).toStringAsFixed(0)}% completado',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      color: Colors.teal[600],
                     ),
                   ),
                 ],
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  progress,
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    fontSize: 12,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
             ),
           ],
         ),
