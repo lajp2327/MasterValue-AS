@@ -6,6 +6,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -18,12 +19,20 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Nombre: Thayli Pacheco',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              'Nombre: Juan Pablo Pérez Valadez',
+              style: TextStyle(
+                fontSize: 20, 
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat',
+              ),
             ),
             Text(
-              'Estudiante de Ingeniería de Datos',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              'Estudiante de Ingeniería en Sistemas Computacionales',
+              style: TextStyle(
+                fontSize: 16, 
+                color: Colors.grey,
+                fontFamily: 'Montserrat',
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -31,11 +40,12 @@ class ProfilePage extends StatelessWidget {
                 // Agrega la lógica para editar el perfil
               },
               child: Text('Editar Perfil'),
-            ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal),
+              ),
           ],
         ),
       ),
     );
   }
 }
-

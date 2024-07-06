@@ -8,10 +8,9 @@ class CoursePage extends StatefulWidget {
 
 class _CoursePageState extends State<CoursePage> {
   final List<Map<String, String>> courses = [
-    {'name': 'Course 1', 'image': 'assets/img/course1.jpeg'},
-    {'name': 'Course 2', 'image': 'assets/img/course2.jpeg'},
-    {'name': 'Course 3', 'image': 'assets/img/course3.jpeg'},
-    {'name': 'Course 4', 'image': 'assets/img/course4.jpeg'},
+    {'name': 'Course 1', 'image': 'assets/img/course1.jpg'},
+    {'name': 'Course 2', 'image': 'assets/img/course2.jpg'},
+    {'name': 'Course 3', 'image': 'assets/img/course3.jpg'},
   ];
 
   String _searchText = '';
