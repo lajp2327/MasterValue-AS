@@ -56,11 +56,11 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text(_userName),
-              accountEmail: Text("valadez2711@gmail.com"),
+              accountEmail: Text("mastervalue@example.com"),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Text(
-                  "JP",
+                  "MV",
                   style: TextStyle(fontSize: 40.0),
                 ),
               ),
@@ -153,60 +153,7 @@ class _HomePageState extends State<HomePage> {
               items: img.map((item) => buildCarouselItem(item)).toList(),
             ),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF54AB95), Color(0xFF5AC375)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                    child: Text(
-                      'Tus Cursos',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Introducción a la Bolsa de Valores',
-                    'Claudia Alves',
-                    'Progreso: 60%',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Finanzas Personales',
-                    'Avery Davis',
-                    'Completado',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Análisis Financiero',
-                    'Yael Amari',
-                    'Progreso: 36%',
-                  ),
-                  buildCategoryItem(
-                    context,
-                    Icons.monetization_on_rounded,
-                    'Economía para Todos',
-                    'Shawn Garcia',
-                    'Progreso: 15%',
-                  ),
-                ],
-              ),
-            ),
+            _buildCoursesSection(), // Integrar la nueva sección de cursos
           ],
         ),
       ),
@@ -227,36 +174,73 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildCategoryItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    String subtitle,
-    String progress,
-  ) {
+  Widget _buildCoursesSection() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Container(
-        width: double.infinity,
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Tus Cursos',
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              fontSize: 20,
+              color: Colors.teal[800],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          _buildCourseCard(
+            'Finanzas Personales',
+            'Carlos López',
+            0.60, // 60% de progreso
+            Icons.monetization_on_rounded,
+            Colors.orange,
+          ),
+          _buildCourseCard(
+            'Inversiones y Bolsa de Valores',
+            'María González',
+            0.83, // Curso completado
+            Icons.trending_up,
+            Colors.green,
+          ),
+          _buildCourseCard(
+            'Contabilidad Básica',
+            'Ana Rodríguez',
+            0.36, // 36% de progreso
+            Icons.account_balance,
+            Colors.blue,
+          ),
+          _buildCourseCard(
+            'Planeación Financiera',
+            'José Martínez',
+            0.15, // 15% de progreso
+            Icons.bar_chart,
+            Colors.purple,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCourseCard(String title, String subtitle, double progress, IconData icon, Color iconColor) {
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.symmetric(vertical: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                icon,
-                color: Colors.black,
-                size: 24,
-              ),
+            CircleAvatar(
+              backgroundColor: iconColor.withOpacity(0.1),
+              child: Icon(icon, color: iconColor),
             ),
-            SizedBox(width: 12),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -264,7 +248,8 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.teal[900],
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 4),
@@ -273,25 +258,27 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Colors.teal[600],
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey[200],
+                    color: iconColor,
+                    minHeight: 5,
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '${(progress * 100).toStringAsFixed(0)}% completado',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 12,
+                      color: Colors.teal[600],
                     ),
                   ),
                 ],
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  progress,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 12,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
             ),
           ],
         ),
