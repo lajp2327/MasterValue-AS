@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'course_page.dart';
-import 'glossary_page.dart';
+import 'expenses_page.dart';
 import 'servicios/database.dart';
 import 'profile_page.dart'; // Importa la página de perfil
 import 'settings_page.dart'; // Importa la página de configuración
@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
-  String _userName = "Juan Pablo"; // Nombre de usuario por defecto
+  String _userName = "Luis Angel Juarez"; // Nombre de usuario por defecto
 
   // Lista de imágenes para el carrusel
   final List<String> img = [
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       var userData = await _databaseHelper.getUserData(userEmail);
 
       setState(() {
-        _userName = userData['nombre'] ?? "Juan Pablo";
+        _userName = userData['nombre'] ?? "Luis Angel Juarez";
       });
     } catch (e) {
       // Manejo de error al cargar los datos del usuario
@@ -55,12 +55,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text(_userName),
-              accountEmail: Text("mastervalue@example.com"),
+              accountName: Text("Susana Mejía Lopez"),
+              accountEmail: Text("Buenas tardes."),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Text(
-                  "MV",
+                  "SM",
                   style: TextStyle(fontSize: 40.0),
                 ),
               ),
@@ -91,11 +91,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ListTile(
                     leading: Icon(Icons.book, color: Colors.teal),
-                    title: Text('Glosario'),
+                    title: Text('Control de Gastos'),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => GlossaryPage()),
+                        MaterialPageRoute(builder: (context) => ExpensesPage ()),
                       );
                     },
                   ),

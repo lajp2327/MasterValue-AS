@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Nombre: Juan Pablo Pérez Valadez',
+              'Nombre: Luis Angel Juarez Pacheco',
               style: TextStyle(
                 fontSize: 20, 
                 fontWeight: FontWeight.bold,
@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             Text(
-              'Estudiante de Ingeniería en Sistemas Computacionales',
+              'Añade una descripción breve...',
               style: TextStyle(
                 fontSize: 16, 
                 color: Colors.grey,

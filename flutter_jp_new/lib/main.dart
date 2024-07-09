@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'course_page.dart';
-import 'glossary_page.dart';
+import 'expenses_page.dart';
 import 'profile_page.dart';
 import 'settings_page.dart';
 import 'login_page.dart';
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CoursePage(),
-    GlossaryPage(),
+    ExpensesPage (),
     ProfilePage(),
     SettingsPage(),
   ];

@@ -3,8 +3,16 @@ import 'video_player_page.dart';
 
 class CourseDetailPage extends StatelessWidget {
   final String courseName;
+  final String courseImage;
 
-  CourseDetailPage({required this.courseName});
+  CourseDetailPage({required this.courseName, required this.courseImage});
+
+  final List<String> modules = [
+    'Introducción',
+    'Conceptos Básicos',
+    'Avanzados',
+    'Prácticas',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +20,33 @@ class CourseDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(courseName),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Image.asset(courseImage, fit: BoxFit.cover),
+            SizedBox(height: 10),
+            Text(
+              courseName,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Descripción del curso',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Módulos del Curso:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            for (String module in modules) Text('• $module'),
+            SizedBox(height: 20),
             Text(
               'Material del Curso:',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text('1. Material de Texto'),
@@ -31,7 +58,8 @@ class CourseDetailPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VideoPlayerPage(videoUrl: 'assets/video/sample_video.mp4'),
+                    builder: (context) =>
+                        VideoPlayerPage(videoUrl: 'assets/video/sample_video.mp4'),
                   ),
                 );
               },
@@ -46,6 +74,19 @@ class CourseDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text('Progreso: 60%'),
+            SizedBox(height: 20),
+            Text(
+              'Insignias:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: [
+                Icon(Icons.star, color: Colors.yellow),
+                Icon(Icons.star, color: Colors.yellow),
+                Icon(Icons.star, color: Colors.grey),
+                Icon(Icons.star, color: Colors.grey),
+              ],
+            ),
           ],
         ),
       ),
