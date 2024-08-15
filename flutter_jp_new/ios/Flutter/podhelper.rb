@@ -1,0 +1,1 @@
+require File.join(File.dirname(File.realdirpath(__FILE__)), '..', '..', 'packages', 'flutter_tools', 'bin', 'podhelper.rb')

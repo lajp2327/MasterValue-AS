@@ -13,6 +13,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
       _expenses.add({
         'title': title,
         'amount': amount,
+        'date': DateTime.now(),
       });
     });
   }
@@ -46,7 +47,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
               Navigator.of(ctx).pop();
             },
           ),
-          TextButton(
+          ElevatedButton(
             child: Text('Agregar'),
             onPressed: () {
               final title = titleController.text;
@@ -54,10 +55,30 @@ class _ExpensesPageState extends State<ExpensesPage> {
               if (title.isNotEmpty && amount > 0) {
                 _addExpense(title, amount);
                 Navigator.of(ctx).pop();
+              } else {
+                // Mostrar un mensaje de error si el título está vacío o el monto es inválido
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  SnackBar(
+                    content: Text('Por favor ingresa un título y un monto válido.'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
               }
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildExpenseItem(Map<String, dynamic> expense) {
+    final date = expense['date'] as DateTime?;
+    return Card(
+      child: ListTile(
+        title: Text(expense['title']),
+        subtitle: Text(
+          '\$${expense['amount'].toStringAsFixed(2)} - ${date != null ? date.toLocal().toString().split(' ')[0] : 'Fecha no disponible'}',
+        ),
       ),
     );
   }
@@ -85,15 +106,7 @@ class _ExpensesPageState extends State<ExpensesPage> {
             )
           : ListView.builder(
               itemCount: _expenses.length,
-              itemBuilder: (ctx, index) {
-                final expense = _expenses[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(expense['title']),
-                    subtitle: Text('\$${expense['amount'].toStringAsFixed(2)}'),
-                  ),
-                );
-              },
+              itemBuilder: (ctx, index) => _buildExpenseItem(_expenses[index]),
             ),
     );
   }

@@ -40,11 +40,19 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(  
         title: Text('Regístrate'),
+        backgroundColor: Color.fromARGB(159, 0, 0, 0),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+            colors: [Color.fromARGB(159, 84, 171, 149), Color(0xFF5AC375)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

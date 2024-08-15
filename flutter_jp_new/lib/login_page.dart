@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'servicios/database.dart';
 import 'register_page.dart';
 import 'home_page.dart';
@@ -25,16 +26,36 @@ class _LoginPageState extends State<LoginPage> {
     String username = _usernameController.text;
     String password = _passwordController.text;
 
+    if (username.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Por favor ingrese todos los campos';
+        _isButtonPressed = false;
+      });
+      return;
+    }
+
     bool isAuthenticated = await _dbHelper.authenticateUser(username, password);
 
     if (isAuthenticated) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      try {
+        String userEmail = await _dbHelper.getUserEmail(username);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(email: userEmail),
+          ),
+        );
+      } catch (e) {
+        setState(() {
+          _errorMessage = 'Error al obtener el email del usuario';
+          _isButtonPressed = false;
+        });
+      }
     } else {
       setState(() {
-        _errorMessage = 'Invalid username or password';
+        _errorMessage = 'Nombre de usuario o contraseña incorrectos';
+        _isButtonPressed = false;
       });
     }
   }
@@ -46,6 +67,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void _signInWithGoogle() async {
+    // Simulación de inicio de sesión con Google (abrir URL en navegador)
+    const url = 'https://accounts.google.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _signInWithFacebook() async {
+    // Simulación de inicio de sesión con Facebook (abrir URL en navegador)
+    const url = 'https://facebook.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF54AB95), Color(0xFF5AC375)],
+            colors: [Color.fromARGB(159, 84, 171, 149), Color(0xFF5AC375)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -63,37 +104,37 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-               SizedBox(height: 20),
-               Text(
-                 'Master Value',
-                 textAlign: TextAlign.center,
-                 style: TextStyle(
-                   fontSize: 36,
-                   fontWeight: FontWeight.bold,
-                   color: Colors.white,
-                 ),
-               ),
-
-               SizedBox(height: 20),
-               Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10.0,
-                      offset: Offset(0.0, 10),
-                    ),
-                  ],
-                ),
-               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: Image.asset('assets/img/logoo.jpeg',
-                  height: 100,),
+                SizedBox(height: 20),
+                Text(
+                  'Master Value',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-
+                SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10.0,
+                        offset: Offset(0.0, 10),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.0),
+                    child: Image.asset(
+                      'assets/img/logoo.jpg',
+                      height: 100,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
                 Text(
                   'Bienvenido!',
@@ -104,73 +145,116 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Padding(padding: const
-                EdgeInsets.symmetric(horizontal:20.0),
-                child: TextField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Correo Electrónico',
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    filled: true,
-                    fillColor: Colors.black26,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: TextField(
+                    controller: _usernameController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Correo Electrónico',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      filled: true,
+                      fillColor: Colors.black26,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
-                Padding(padding: const
-                EdgeInsets.symmetric(horizontal:20.0),
-                child: TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      filled: true,
+                      fillColor: Colors.black26,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      errorText: _errorMessage.isEmpty ? null : _errorMessage,
                     ),
-                    filled: true,
-                    fillColor: Colors.black26,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    errorText: _errorMessage.isEmpty ? null : _errorMessage,
-                  ),
-                  obscureText: true,
+                    obscureText: true,
                   ),
                 ),
                 SizedBox(height: 20),
-                AnimatedOpacity(opacity: _isButtonPressed ? 0.5 : 1.0, duration: Duration(milliseconds: 200),
-                child: ElevatedButton(
-                  onPressed: _login,
-                  child: Text('Iniciar Sesión',
+                AnimatedOpacity(
+                  opacity: _isButtonPressed ? 0.5 : 1.0,
+                  duration: Duration(milliseconds: 200),
+                  child: ElevatedButton(
+                    onPressed: _login,
+                    child: Text(
+                      'Iniciar Sesión',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                GestureDetector(
+                  onTap: _goToRegisterPage,
+                  child: Text(
+                    '¿No tienes cuenta aún?',
                     style: TextStyle(
-                      color: Colors.white, // Asegura que el color del texto sea blanco
-                      fontSize: 24,
+                      color: Colors.white,
+                      decoration: TextDecoration.underline,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _signInWithGoogle,
+                  child: Text(
+                    'Sign in with Google',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    backgroundColor: Colors.red,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                ),
                 SizedBox(height: 10),
-                GestureDetector(
-                  onTap: _goToRegisterPage,
-                  child: Text('¿No tienes cuenta aún?',
+                ElevatedButton(
+                  onPressed: _signInWithFacebook,
+                  child: Text(
+                    'Sign in with Facebook',
                     style: TextStyle(
                       color: Colors.white,
-                      decoration: TextDecoration.underline,
-                      fontSize: 16,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),

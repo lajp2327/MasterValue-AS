@@ -32,8 +32,8 @@ class MasterValueApp extends StatelessWidget {
       routes: {
         '/home': (context) => MyHomePage(),
         '/register': (context) => RegisterPage(),
-        '/completeProfile': (context) => CompleteProfilePage(email: '', password: '',),
-      }
+        '/completeProfile': (context) => CompleteProfilePage(email: '', password: ''),
+      },
     );
   }
 }
@@ -45,11 +45,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+
+  // Variables de ejemplo para el email, puedes ajustar según tu lógica
+  String email = 'usuario@example.com'; // Cambia esto según tu lógica
+
   static List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
+    HomePage(email: 'usuario@example.com'), // Puedes cambiar 'usuario@example.com' por una variable dinámica si es necesario
     CoursePage(),
-    ExpensesPage (),
-    ProfilePage(),
+    ExpensesPage(),
+    ProfilePage(email: 'usuario@example.com'), // Ajusta esto según la lógica
     SettingsPage(),
   ];
 

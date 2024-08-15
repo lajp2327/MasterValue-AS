@@ -58,7 +58,15 @@ class _CompleteProfilePageState extends State<CompleteProfilePage> {
       appBar: AppBar(
         title: Text('Completa tu perfil'),
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+            colors: [Color.fromARGB(159, 84, 171, 149), Color(0xFF5AC375)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Container(
           padding: const EdgeInsets.all(16.0),
           child: Column(

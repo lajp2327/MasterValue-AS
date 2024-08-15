@@ -1,32 +1,44 @@
-# Define la plataforma iOS y la versión mínima requerida
-platform :ios, '15.0'
+# Uncomment this line to define a global platform for your project
+# platform :ios, '12.0'
 
-# Obtiene la ruta al directorio actual del Podfile
-flutter_root = File.dirname(File.realpath(__FILE__))
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-# Evalúa el podhelper.rb de Flutter para instalar los Pods
-eval(File.read(File.join(flutter_root, '..', '..', '..', '..', 'Developer', 'flutter', 'packages', 'flutter_tools', 'bin', 'podhelper.rb')), binding)
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
 
-# Define el target para tu aplicación iOS (usando el nombre correcto del target)
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
 target 'Runner' do
-  # Indica que se usarán frameworks
   use_frameworks!
+  use_modular_headers!
 
-  # Define el path a la aplicación Flutter en iOS
-  flutter_application_path = File.dirname(File.realpath(__FILE__))
-
-  # Instala todos los Pods de Flutter para la aplicación iOS
-  flutter_install_all_ios_pods flutter_application_path
-
-  # Define el target de pruebas si es necesario
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
     inherit! :search_paths
-    # Aquí se pueden agregar Pods adicionales para pruebas si es necesario
   end
 end
 
-# Script post-install para configuraciones adicionales si es necesario
 post_install do |installer|
-  # Llama a la función de post-instalación de Flutter si está definida
-  flutter_post_install(installer) if respond_to?(:flutter_post_install)
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
 end

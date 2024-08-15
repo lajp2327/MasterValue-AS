@@ -19,7 +19,6 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'master_value.db');
-
     return await openDatabase(
       path,
       version: 2,
@@ -32,7 +31,7 @@ class DatabaseHelper {
       CREATE TABLE users (
         id_user INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT,
-        password VARCHAR,
+        password TEXT,
         nombre TEXT,
         apellido_p TEXT,
         apellido_m TEXT,
@@ -57,6 +56,20 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> updateProfile(Map<String, dynamic> data) async {
+    var db = await database;
+
+    if (data.containsKey('email')) {
+      await db.update(
+        'users',
+        data,
+        where: 'email = ?',
+        whereArgs: [data['email']],
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+  }
+
   Future<bool> authenticateUser(String email, String password) async {
     var db = await database;
     var result = await db.query(
@@ -75,5 +88,16 @@ class DatabaseHelper {
       whereArgs: [email],
     );
     return result.isNotEmpty ? result.first : {};
+  }
+
+  Future<String> getUserEmail(String email) async {
+    var db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'users',
+      columns: ['email'],
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    return result.isNotEmpty ? result.first['email'] as String : '';
   }
 }

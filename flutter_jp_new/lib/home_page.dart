@@ -7,13 +7,17 @@ import 'profile_page.dart'; // Importa la página de perfil
 import 'settings_page.dart'; // Importa la página de configuración
 
 class HomePage extends StatefulWidget {
+  final String email;
+
+  HomePage({required this.email});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
-  String _userName = "Luis Angel Juarez"; // Nombre de usuario por defecto
+  String _userName = "Susana Mejía López"; // Nombre de usuario por defecto
 
   // Lista de imágenes para el carrusel
   final List<String> img = [
@@ -29,14 +33,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadUserData() async {
-    // Aquí debes obtener el email del usuario actual, por ejemplo desde Firebase Auth
-    String userEmail = 'usuario@example.com'; 
+    // Usa el email proporcionado en lugar del fijo
+    String userEmail = widget.email;
 
     try {
       var userData = await _databaseHelper.getUserData(userEmail);
 
       setState(() {
-        _userName = userData['nombre'] ?? "Luis Angel Juarez";
+        _userName = userData['nombre'] ?? "Usuario";
       });
     } catch (e) {
       // Manejo de error al cargar los datos del usuario
@@ -55,12 +59,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Susana Mejía Lopez"),
+              accountName: Text(_userName),
               accountEmail: Text("Buenas tardes."),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Text(
-                  "SM",
+                  _userName.isNotEmpty ? _userName[0] : "SM",
                   style: TextStyle(fontSize: 40.0),
                 ),
               ),
@@ -95,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ExpensesPage ()),
+                        MaterialPageRoute(builder: (context) => ExpensesPage()),
                       );
                     },
                   ),
@@ -109,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                  MaterialPageRoute(builder: (context) => ProfilePage(email: widget.email)),
                 );
               },
             ),
