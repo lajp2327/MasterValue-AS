@@ -232,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
             GestureDetector(
               onTap: _editName,
               child: Text(
-                'Nombre: $_name',
+                '$_name',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
